@@ -59,6 +59,11 @@ export default function Mock() {
               flexDirection: "row",
               alignItems: "center",
               marginBottom: 16,
+              shadowColor: '#000',
+              shadowOffset: { width: 2, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 4,
+              elevation: 2, // For Android
             }}
           >
             <Image
