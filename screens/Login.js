@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -19,12 +19,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const login = async (data) => {
   try {
     const response = await axios.post(
-      "https://your-api-url.com/api/v1/user/login", // Replace with your actual API URL
+      "https://server.panini8.com/api/v1/user/login", // Replace with your actual API URL
       data
     );
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || "Something went wrong!";
+    throw error || "Something went wrong!";
   }
 };
 
@@ -50,14 +50,13 @@ const Login = () => {
         type: "success",
         text1: "Successfully Logged In!",
       });
-
       // Ensure accessToken is available before storing it
       if (res?.data?.accessToken) {
         await AsyncStorage.setItem("access-token", res.data.accessToken);
       }
 
       // Check if sGoalId exists to navigate accordingly
-      if (res.sGoalId) {
+      if (res?.data?.sGoalId) {
         navigation.navigate("Play"); // Replace with your "Play" screen route
       } else {
         navigation.navigate("Goals"); // Replace with your "Goals" screen route
