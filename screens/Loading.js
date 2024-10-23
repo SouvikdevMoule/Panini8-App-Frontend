@@ -9,7 +9,7 @@ const Loading = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('Item');
+      navigation.navigate('Main');
     }, 2300); // 5000 milliseconds = 5 seconds
 
     return () => clearTimeout(timer);

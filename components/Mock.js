@@ -68,7 +68,7 @@ export default function Mock() {
               shadowOffset: { width: 2, height: 2 },
               shadowOpacity: 0.3,
               shadowRadius: 4,
-              elevation: 5, // For Android
+              elevation: 2, // For Android
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
