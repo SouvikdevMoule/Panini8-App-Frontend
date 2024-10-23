@@ -13,14 +13,13 @@ const fetchUserData = async () => {
   if (accessToken) {
     try {
       const response = await fetch(
-        `${process.env.REACT_NATIVE_APP_API_URL}/api/v1/user/me`, // Replace with your actual API URL
+        `https://server.panini8.com/api/v1/user/me`, // Replace with your actual API URL
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-      console.log("ayush", response);
 
       if (!response.ok) {
         throw new Error("Failed to fetch user data");
@@ -38,7 +37,7 @@ const fetchUserData = async () => {
     }
   }
 
-  return userData;
+  return userData?.data?.user;
 };
 
 const AuthProvider = ({ children }) => {
