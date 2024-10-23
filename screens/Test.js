@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import Header from '../components/Header';
