@@ -10,6 +10,9 @@ import Main from "../screens/Main";
 import Play from "../screens/Play";
 import Dash from "../screens/Dash";
 import Progress from "../screens/Progress";
+import Tests from "../screens/Tests";
+import Test from "../screens/Test";
+import Item from "../screens/Item";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +29,9 @@ function StackNavigator() {
             <Stack.Screen  name="Play"  component={Play}/>
             <Stack.Screen  name="Dash"  component={Dash}/>
             <Stack.Screen  name="Progress"  component={Progress}/>
+            <Stack.Screen  name="Tests"  component={Tests}/>
+            <Stack.Screen  name="Test"  component={Test}/>
+            <Stack.Screen  name="Item"  component={Item}/>
         </Stack.Navigator>
        </NavigationContainer>
     )

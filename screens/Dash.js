@@ -1,175 +1,288 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
 import Header from '../components/Header';
 import PracticeSection from '../components/PracticeSection';
 import Mock from '../components/Mock';
+import { useRoute } from '@react-navigation/native';
+import Lesson from '../components/Lesson';
 
 export default function Dash() {
+  const route = useRoute();
+  const { contestName } = route.params || {};
+  const [lessons, setLessons] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (contestName) {
+      const getContestApi = `https://server.panini8.com/api/v1/article/contest/lessons?contest=${contestName}`;
+
+      fetch(getContestApi)
+        .then((response) => response.json())
+        .then((json) => {
+          console.log("Fetched Lessons Data:", json);
+          setLessons(json);
+        })
+        .catch((error) => console.error("Error fetching lessons data:", error))
+        .finally(() => setLoading(false));
+    }
+  }, [contestName]);
+
   return (
-    <View className="flex-1">
+    <View style={styles.flexContainer}>
       <Header />
       <ScrollView>
-      <LinearGradient
-        // Gradient colors: from green-200 to blue-100
-        colors={['#bbf7d0', '#dbeafe']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        className="flex-1 p-6"
-      >
-        <Text className="text-2xl font-bold text-green-700 mb-4">
-          Arjun, <Text className="text-black">Welcome to AMC 10 Dashboard</Text>
-        </Text>
+        <LinearGradient
+          colors={['#bbf7d0', '#dbeafe']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gradient}
+        >
+          <Text style={styles.welcomeText}>
+            Arjun, <Text style={styles.welcomeTextBlack}>Welcome to {contestName} Dashboard</Text>
+          </Text>
 
-        <View className="w-full h-48 bg-white rounded-lg shadow-lg overflow-hidden mb-6 border-2 border-white">
-          <Image
-            source={require("../assets/img.jpg")}
-            className="w-full h-full"
-            resizeMode="cover"
-          />
-          <View className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-3 py-1 rounded">
-            <Text className="text-white text-lg font-semibold">AMC 10</Text>
-          </View>
-        </View>
-
-        <View className="w-full flex-row flex-wrap justify-between bg-gray-100 rounded-lg shadow-lg p-3 mb-6">
-          <TouchableOpacity
-            className="w-[48%] bg-white py-4 rounded-full mb-4 items-center flex-row justify-center"
-            style={{
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.3,
-              shadowRadius: 4,
-              elevation: 5, // For Android
-            }}
-          >
+          <View style={styles.imageContainer}>
             <Image
-              source={require("../assets/practice.png")}
-              className="w-5 h-5 mr-3"
+              source={require("../assets/img.jpg")}
+              style={styles.image}
               resizeMode="cover"
             />
-            <Text className="text-gray-700 font-semibold">Practice</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="w-[48%] bg-white py-4 rounded-full mb-4 items-center  flex-row justify-center"
-            style={{
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.3,
-              shadowRadius: 4,
-              elevation: 5, // For Android
-            }}
-          >
-            <Image
-              source={require("../assets/practice.png")}
-              className="w-5 h-5 mr-3"
-              resizeMode="cover"
-            />
-            <Text className="text-gray-700 font-semibold">Mock Test</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="w-[48%] bg-white py-4 rounded-full mb-4 items-center  flex-row justify-center"
-            style={{
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.3,
-              shadowRadius: 4,
-              elevation: 5, // For Android
-            }}
-          >
-            <Image
-              source={require("../assets/practice.png")}
-              className="w-5 h-5 mr-3"
-              resizeMode="cover"
-            />
-            <Text className="text-gray-700 font-semibold">Ask Doubts</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="w-[48%] bg-white py-4 rounded-full mb-4 items-center  flex-row justify-center"
-            style={{
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.3,
-              shadowRadius: 4,
-              elevation: 5, // For Android
-            }}
-          >
-            <Image
-              source={require("../assets/practice.png")}
-              className="w-5 h-5 mr-3"
-              resizeMode="cover"
-            />
-            <Text className="text-gray-700 font-semibold">Track Progress</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="w-[48%] bg-white py-4 rounded-full mb-4 items-center  flex-row justify-center"
-            style={{
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.3,
-              shadowRadius: 4,
-              elevation: 5, // For Android
-            }}
-          >
-            <Image
-              source={require("../assets/practice.png")}
-              className="w-5 h-5 mr-3"
-              resizeMode="cover"
-            />
-            <Text className="text-gray-700 font-semibold">Live Classes</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Live Class & Growth Path Section */}
-        <View className="w-full bg-white rounded-lg shadow-lg p-4 mb-6">
-          <View className="flex-row items-center mb-4">
-            <Image
-              source={require("../assets/icon.png")} // Replace with your actual icon path
-              className="w-6 h-6 mr-2"
-            />
-            <Text className="text-lg font-bold">Live Class & Growth Path</Text>
-          </View>
-          
-          <View className="bg-gray-100 p-4 rounded-lg mb-4"
-           style={{
-            shadowColor: '#000',
-            shadowOffset: { width: 2, height: 2 },
-            shadowOpacity: 0.3,
-            shadowRadius: 4,
-            elevation: 5, // For Android
-          }}>
-            <Text className="text-gray-700 mb-4"
-           
-            >
-              Join our live classes and get personalized growth paths to enhance your learning experience.
-            </Text>
-            <TouchableOpacity className="flex-row items-center bg-blue-600 py-2 px-4 rounded-full mb-2 justify-center">
-            <Image
-              source={require("../assets/practice.png")} // Replace with the actual icon path
-              className="w-4 h-4 mr-2 "
-            />
-            <Text className="text-white font-semibold">TRY</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity className="flex-row items-center bg-yellow-500 py-2 px-4 rounded-full mb-2 justify-center">
-            <Text className="text-white font-semibold">Read Testimonial</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity className="flex-row items-center bg-blue-600 py-2 px-4 rounded-full justify-center">
-            <Image
-              source={require("../assets/practice.png")} // Replace with the actual icon path
-              className="w-4 h-4 mr-2"
-            />
-            <Text className="text-white font-semibold">Upcoming Tasks</Text>
-          </TouchableOpacity>
+            <View style={styles.overlay}>
+            {/* <Image
+              source={{ uri: lessons.contest.icon }}
+              className="h-10 w-10"
+              
+            /> */}
+              <Text style={styles.overlayText}>{contestName}</Text>
+            </View>
           </View>
 
+          <View style={styles.buttonContainer}>
+            {/* Practice Button */}
+            <TouchableOpacity style={styles.actionButton}>
+              <Image
+                source={require("../assets/practice.png")}
+                style={styles.actionIcon}
+                resizeMode="cover"
+              />
+              <Text style={styles.actionText}>Practice</Text>
+            </TouchableOpacity>
 
+            {/* Mock Test Button */}
+            <TouchableOpacity style={styles.actionButton}>
+              <Image
+                source={require("../assets/practice.png")}
+                style={styles.actionIcon}
+                resizeMode="cover"
+              />
+              <Text style={styles.actionText}>Mock Test</Text>
+            </TouchableOpacity>
+
+            {/* Ask Doubts Button */}
+            <TouchableOpacity style={styles.actionButton}>
+              <Image
+                source={require("../assets/practice.png")}
+                style={styles.actionIcon}
+                resizeMode="cover"
+              />
+              <Text style={styles.actionText}>Ask Doubts</Text>
+            </TouchableOpacity>
+
+            {/* Track Progress Button */}
+            <TouchableOpacity style={styles.actionButton}>
+              <Image
+                source={require("../assets/practice.png")}
+                style={styles.actionIcon}
+                resizeMode="cover"
+              />
+              <Text style={styles.actionText}>Track Progress</Text>
+            </TouchableOpacity>
+
+            {/* Study Material Button */}
+            <TouchableOpacity style={styles.actionButton}>
+              <Image
+                source={require("../assets/practice.png")}
+                style={styles.actionIcon}
+                resizeMode="cover"
+              />
+              <Text style={styles.actionText}>Study Material</Text>
+            </TouchableOpacity>
+
+            {/* Live Classes Button */}
+            <TouchableOpacity style={styles.actionButton}>
+              <Image
+                source={require("../assets/practice.png")}
+                style={styles.actionIcon}
+                resizeMode="cover"
+              />
+              <Text style={styles.actionText}>Live Classes</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.liveClassSection}>
+            <View style={styles.liveClassHeader}>
+              <Image
+                source={require("../assets/icon.png")}
+                style={styles.icon}
+              />
+              <Text style={styles.liveClassTitle}>Live Class & Growth Path</Text>
+            </View>
+
+            <View style={styles.liveClassContent}>
+              <Text style={styles.liveClassText}>
+                Join our live classes and get personalized growth paths to enhance your learning experience.
+              </Text>
+
+              {/* TRY Button */}
+              <TouchableOpacity style={[styles.actionButton, styles.tryButton]}>
+                <Text style={[styles.actionText, { color: '#fff' }]}>TRY</Text>
+              </TouchableOpacity>
+
+              {/* Read Testimonial Button */}
+              <TouchableOpacity style={[styles.actionButton, styles.testimonialButton]}>
+                <Text style={[styles.actionText, { color: '#fff' }]}>Read Testimonial</Text>
+              </TouchableOpacity>
+
+              {/* Upcoming Tasks Button */}
+              <TouchableOpacity style={[styles.actionButton, styles.tryButton]}>
+                <Text style={[styles.actionText, { color: '#fff' }]}>Upcoming Tasks</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View>
+          <PracticeSection />
+          </View>
+        <View>
+        <Lesson/>
         </View>
-        <PracticeSection /> 
-        <Mock/>
-      </LinearGradient>
+          <View className="h-full">
+          <Mock />
+          </View>
+        </LinearGradient>
       </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1,
+  },
+  gradient: {
+    flex: 1,
+    padding: 16,
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#166534',
+    marginBottom: 16,
+  },
+  welcomeTextBlack: {
+    color: '#000',
+  },
+  imageContainer: {
+    width: '100%',
+    height: 200,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: '#fff',
+    position: 'relative',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    position: 'absolute',
+    bottom: 8,
+    left: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  overlayText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  actionButton: {
+    width: '48%',
+    backgroundColor: '#fff',
+    paddingVertical: 12,
+    borderRadius: 24,
+    marginBottom: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  actionIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+  },
+  actionText: {
+    fontWeight: 'bold',
+  },
+  liveClassSection: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+  },
+  liveClassHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    marginRight: 8,
+  },
+  liveClassTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  liveClassContent: {
+    backgroundColor: '#f0f0f0',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  liveClassText: {
+    color: '#333',
+    marginBottom: 16,
+  },
+  tryButton: {
+    backgroundColor: '#2563eb',
+    marginBottom: 8,
+  },
+  testimonialButton: {
+    backgroundColor: '#f59e0b',
+    marginBottom: 8,
+  },
+  lessonItem: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+});

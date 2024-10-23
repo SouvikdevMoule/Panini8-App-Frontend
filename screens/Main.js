@@ -83,106 +83,112 @@ export default function Main() {
           </View>
 
           {/* Dropdown Filters */}
-          <View className="py-6 flex gap-2">
-            {/* First Dropdown */}
-            <DropDownPicker
-              open={open1}
-              value={value}
-              items={items}
-              setOpen={setOpen1}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="Filter by Contest"
-              style={{
-                borderWidth: 2,
-                borderColor: 'white',
-                backgroundColor: '#59B792',
-                borderRadius: 10,
-              }}
-              textStyle={{
-                color: 'white',
-                fontWeight: "500"
-              }}
-              dropDownContainerStyle={{
-                borderWidth: 2,
-                borderColor: 'white',
-                backgroundColor: '#59B792',
-                borderRadius: 10,
-              }}
-              placeholderStyle={{
-                color: 'white',
-              }}
-              ArrowDownIconComponent={() => <Ionicons name="chevron-down" size={18} color="white" />}
-              ArrowUpIconComponent={() => <Ionicons name="chevron-up" size={18} color="white" />}
-            />
+          <View className="mt-6 w-[100%]" >
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+        {/* First Dropdown */}
+        <DropDownPicker
+          open={open1}
+          value={value}
+          items={items}
+          setOpen={setOpen1}
+          setValue={setValue}
+          setItems={setValue}
+          placeholder="Contest"
+          style={{
+            borderWidth: 2,
+            borderColor: 'white',
+            backgroundColor: '#59B792',
+            borderRadius: 10,
+            width: "100%"
+          }}
+          textStyle={{
+            color: 'white',
+            fontWeight: "500"
+          }}
+          dropDownContainerStyle={{
+            borderWidth: 2,
+            borderColor: 'white',
+            backgroundColor: '#59B792',
+            borderRadius: 10,
+          }}
+          placeholderStyle={{
+            color: 'white',
+          }}
+          ArrowDownIconComponent={() => <Ionicons name="chevron-down" size={18} color="white" />}
+          ArrowUpIconComponent={() => <Ionicons name="chevron-up" size={18} color="white" />}
+          containerStyle={{ width: '30%' }}
+        />
 
-            {/* Second Dropdown */}
-            <DropDownPicker
-              open={open2}
-              value={value}
-              items={items}
-              setOpen={setOpen2}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="Filter by Grade"
-              style={{
-                borderWidth: 2,
-                borderColor: 'white',
-                backgroundColor: '#59B792',
-                borderRadius: 10,
-              }}
-              textStyle={{
-                color: 'white',
-                fontWeight: "500"
-              }}
-              dropDownContainerStyle={{
-                borderWidth: 2,
-                borderColor: 'white',
-                backgroundColor: '#59B792',
-                borderRadius: 10,
-              }}
-              placeholderStyle={{
-                color: 'white',
-              }}
-              ArrowDownIconComponent={() => <Ionicons name="chevron-down" size={18} color="white" />}
-              ArrowUpIconComponent={() => <Ionicons name="chevron-up" size={18} color="white" />}
-            />
+        {/* Second Dropdown */}
+        <DropDownPicker
+          open={open2}
+          value={value}
+          items={items}
+          setOpen={setOpen2}
+          setValue={setValue}
+          setItems={setValue}
+          placeholder=" Grade"
+          style={{
+            borderWidth: 2,
+            borderColor: 'white',
+            backgroundColor: '#59B792',
+            borderRadius: 10,
+          }}
+          textStyle={{
+            color: 'white',
+            fontWeight: "500"
+          }}
+          dropDownContainerStyle={{
+            borderWidth: 2,
+            borderColor: 'white',
+            backgroundColor: '#59B792',
+            borderRadius: 10,
+          }}
+          placeholderStyle={{
+            color: 'white',
+          }}
+          ArrowDownIconComponent={() => <Ionicons name="chevron-down" size={18} color="white" />}
+          ArrowUpIconComponent={() => <Ionicons name="chevron-up" size={18} color="white" />}
+          containerStyle={{ width: '30%' }}
+        />
 
-            {/* Third Dropdown */}
-            <DropDownPicker
-              open={open3}
-              value={value}
-              items={items}
-              setOpen={setOpen3}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="Filter by Country"
-              style={{
-                borderWidth: 2,
-                borderColor: 'white',
-                backgroundColor: '#59B792',
-                borderRadius: 10,
-              }}
-              textStyle={{
-                color: 'white',
-                fontWeight: "500"
-              }}
-              dropDownContainerStyle={{
-                borderWidth: 2,
-                borderColor: 'white',
-                backgroundColor: '#59B792',
-                borderRadius: 10,
-              }}
-              placeholderStyle={{
-                color: 'white',
-              }}
-              ArrowDownIconComponent={() => <Ionicons name="chevron-down" size={18} color="white" />}
-              ArrowUpIconComponent={() => <Ionicons name="chevron-up" size={18} color="white" />}
-            />
-          </View>
+        {/* Third Dropdown */}
+        <DropDownPicker
+          open={open3}
+          value={value}
+          items={items}
+          setOpen={setOpen3}
+          setValue={setValue}
+          setItems={setValue}
+          placeholder=" Country"
+          style={{
+            borderWidth: 2,
+            borderColor: 'white',
+            backgroundColor: '#59B792',
+            borderRadius: 10,
+          }}
+          textStyle={{
+            color: 'white',
+            fontWeight: "500"
+          }}
+          dropDownContainerStyle={{
+            borderWidth: 2,
+            borderColor: 'white',
+            backgroundColor: '#59B792',
+            borderRadius: 10,
+          }}
+          placeholderStyle={{
+            color: 'white',
+          }}
+          ArrowDownIconComponent={() => <Ionicons name="chevron-down" size={18} color="white" />}
+          ArrowUpIconComponent={() => <Ionicons name="chevron-up" size={18} color="white" />}
+          containerStyle={{ width: '30%' }}
+        />
+      </View>
+    </View>
 
           <View>
-          <CustomCard/><CustomCard/><CustomCard/>
+          <CustomCard/>
           </View>
 
 

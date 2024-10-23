@@ -1,71 +1,102 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-
-const mockTests = [
-  {
-    id: 1,
-    icon: require('../assets/practice.png'), // Replace with your actual icon path
-    title: 'ISI BStat - BMath Entrance - Three Full Length Objective Tests',
-    description:
-      "The BStat and BMath Entrance of ISI Entrance is ‘different’ from IIT JEE or other engineering entrances. It tests creativity and ingenuity of the problem solver that requires more than mechanical application of formulae. Many of these problems are inspired from erstwhile Soviet Union math contests and other math olympiads. The entrance has two sections: Objective section containing 30 problems to be solved in 120 minutes. Subjective section containing 10 problems to be solved in 120 minutes",
-    duration: '0 Minutes',
-  },
-  {
-    id: 2,
-    icon: require('../assets/practice.png'), // Replace with your actual icon path
-    title: 'ISI BStat - BMath Entrance - Three Full Length Subjective Tests',
-    description:
-      "The BStat and BMath Entrance of ISI Entrance is ‘different’ from IIT JEE or other engineering entrances. It tests creativity and ingenuity of the problem solver that requires more than mechanical application of formulae. Many of these problems are inspired from erstwhile Soviet Union math contests and other math olympiads. The entrance has two sections: Objective section containing 30 problems to be solved in 120 minutes. Subjective section containing 10 problems to be solved in 120 minutes",
-    duration: '0 Minutes',
-  },
-  {
-    id: 3,
-    icon: require('../assets/practice.png'), // Replace with your actual icon path
-    title: 'NMTC Primary Stage I - Three Full Length Mock Test',
-    description:
-      "The National Mathematics Talent Contest or NMTC is a national-level mathematics contest conducted by the Association of Mathematics Teachers of India (AMTI). It is strongest in Tamil Nadu, which is the operating base of the AMTI. The AMTI is a pioneer organisation in promoting, and conducting, Maths Talent Tests in India. In the National level test, 66,066 students, from 332 institutions spread all over India, participated at the screening level.",
-    duration: '0 Minutes',
-  },
-];
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
 export default function Mock() {
+  const route = useRoute();
+  const { contestName } = route.params || {};
+  const [mock, setMock] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (contestName) {
+      const getContestApi = `https://server.panini8.com/api/v1/article/mocks/related/${contestName}`;
+
+      fetch(getContestApi)
+        .then((response) => response.json())
+        .then((json) => {
+          console.log("Fetched Mock Tests Data:", json);
+          setMock(json);
+        })
+        .catch((error) => console.error("Error fetching mock tests data:", error))
+        .finally(() => setLoading(false));
+    }
+  }, [contestName]);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
   return (
-    <ScrollView className="flex-1 my-4 p-4 bg-white">
-      <View className="mb-6 ">
-        <View className="flex-row items-center mb-4 ">
+   <View className="flex items-center h-full"
+>
+     <ScrollView
+      style={{
+        flex: 1,
+        padding: 16,
+        width: "100%",
+        backgroundColor: 'white',
+        borderRadius: 8,
+        margin: 16,
+        
+        shadowColor: '#000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 5, // For Android
+      }}
+    >
+      <View style={{ marginBottom: 16 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
           <Image
             source={require('../assets/practice.png')} // Replace with your actual icon path
-            className="w-6 h-6 mr-2"
+            style={{ width: 24, height: 24, marginRight: 8 }}
           />
-          <Text className="text-lg font-bold">Mock Test</Text>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Mock Test</Text>
         </View>
       </View>
-      {mockTests.map((test) => (
-        <View key={test.id} className="w-full bg-gray-100 rounded-lg shadow-lg p-4 mb-6"
-        style={{
-            shadowColor: '#000',
-            shadowOffset: { width: 2, height: 2 },
-            shadowOpacity: 0.3,
-            shadowRadius: 4,
-            elevation: 5, // For Android
-          }}
-        >
-          <View className="flex-row items-center mb-4">
-            <Image source={test.icon} className="w-10 h-10 mr-4" />
-            <View className="flex-1">
-              <Text className="text-base font-bold">{test.title}</Text>
-              <Text className="text-sm text-gray-500">{test.duration}</Text>
+      {mock.length > 0 ? (
+        mock.map((test) => (
+          <View
+            key={test.id}
+            style={{
+              backgroundColor: '#f0f0f0',
+              borderRadius: 8,
+              padding: 16,
+              marginBottom: 16,
+              shadowColor: '#000',
+              shadowOffset: { width: 2, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 4,
+              elevation: 5, // For Android
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+              <Image source={test.icon || require('../assets/practice.png')} style={{ width: 40, height: 40, marginRight: 16 }} />
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{test.name}</Text>
+                <Text style={{ fontSize: 14, color: '#888' }}>{test.duration || '0 Minutes'}</Text>
+              </View>
+            </View>
+            <Text style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>{test.description}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#22c55e',
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  borderRadius: 20,
+                }}
+              >
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>Try Now</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <Text className="text-sm text-gray-700 mb-4">{test.description}</Text>
-          <View className="flex-row justify-end">
-            <TouchableOpacity className="bg-green-500 py-2 px-4 rounded-full">
-              <Text className="text-white font-semibold">Try Now</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ))}
+        ))
+      ) : (
+        <Text style={{ fontSize: 16, textAlign: 'center', color: '#888' }}>No mock tests available.</Text>
+      )}
     </ScrollView>
+   </View>
   );
 }
