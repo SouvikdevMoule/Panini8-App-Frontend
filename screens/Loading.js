@@ -17,6 +17,7 @@ const Loading = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.navigate("Login");
+
     }, 2300); // 5000 milliseconds = 5 seconds
 
     return () => clearTimeout(timer);
