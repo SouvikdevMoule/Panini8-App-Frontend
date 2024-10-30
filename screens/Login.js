@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  ScrollView,
   ImageBackground,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
@@ -19,7 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const login = async (data) => {
   try {
     const response = await axios.post(
-      "https://server.panini8.com/api/v1/user/login", // Replace with your actual API URL
+      "http://localhost:4000/api/v1/user/login", // Replace with your actual API URL
       data
     );
     return response.data;
@@ -50,6 +49,7 @@ const Login = () => {
         type: "success",
         text1: "Successfully Logged In!",
       });
+
       // Ensure accessToken is available before storing it
       if (res?.data?.accessToken) {
         await AsyncStorage.setItem("access-token", res.data.accessToken);
@@ -64,7 +64,7 @@ const Login = () => {
     } catch (error) {
       Toast.show({
         type: "error",
-        text1: error || "Something went wrong!",
+        text1: error.response?.data?.message || "Something went wrong!",
       });
     } finally {
       setLoading(false);
@@ -74,58 +74,51 @@ const Login = () => {
   return (
     <ImageBackground
       source={require("../assets/panini.png")}
-      style={{ flex: 1 }}
+      style={styles.backgroundImage}
       resizeMode="cover"
       blurRadius={4}
     >
-      <View className="flex-1 justify-center items-center">
-        <View className="gap-2 w-[90%] justify-center items-center bg-white py-4 rounded-lg shadow-xl">
-          <Image
-            className="h-[80px] w-[180px]"
-            source={require("../assets/logo.png")}
-          />
-          <Text className="text-2xl font-semibold">Log In to Your Account</Text>
-          <Text className="text-gray-600 font-semibold">
-            Sign in to continue learning
-          </Text>
+      <View style={styles.container}>
+        <View style={styles.loginBox}>
+          <Image style={styles.logo} source={require("../assets/logo.png")} />
+          <Text style={styles.title}>Log In to Your Account</Text>
+          <Text style={styles.subTitle}>Sign in to continue learning</Text>
 
           {/* Google Sign-In Button (UI only, not functional) */}
-          <TouchableOpacity className="items-center border-2 py-1 border-gray-400 rounded-lg w-[80%] bg-white">
-            <View className="flex gap-2 flex-row items-center justify-center">
+          <TouchableOpacity style={styles.googleButton}>
+            <View style={styles.googleButtonContent}>
               <Image
-                className="h-8 w-8"
+                style={styles.googleIcon}
                 source={require("../assets/google.png")}
               />
-              <Text className="font-semibold text-base">
-                Sign in with Google
-              </Text>
+              <Text style={styles.googleButtonText}>Sign in with Google</Text>
             </View>
           </TouchableOpacity>
 
-          <Text className="font-semibold text-gray-500 text-base">
+          <Text style={styles.separator}>
             ____________________ OR ____________________
           </Text>
 
-          <View className="w-[80%] flex flex-col">
+          <View style={styles.formContainer}>
             {/* Email Input Field */}
             <Controller
               name="email"
               control={control}
               render={({ field: { onBlur, onChange, value } }) => (
-                <View className="gap-2">
-                  <Text className="text-base font-semibold">Email</Text>
-                  <View className="border-[1px] p-2 border-gray-400 rounded-lg mb-2">
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Email</Text>
+                  <View style={styles.inputField}>
                     <TextInput
                       placeholder="Email Address"
                       placeholderTextColor="#8a8888"
                       value={value}
                       onBlur={onBlur}
                       onChangeText={onChange}
-                      className="text-base"
+                      style={styles.inputText}
                     />
                   </View>
                   {errors.email && (
-                    <Text className="mb-1 text-red-500">
+                    <Text style={styles.errorText}>
                       {errors.email.type === "required" &&
                         "Email Address is required*"}
                     </Text>
@@ -140,9 +133,9 @@ const Login = () => {
               name="password"
               control={control}
               render={({ field: { onBlur, onChange, value } }) => (
-                <View className="gap-2">
-                  <Text className="text-base font-bold">Password</Text>
-                  <View className="border-[1px] p-2 border-gray-400 rounded-lg mb-2 flex flex-row justify-between">
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Password</Text>
+                  <View style={styles.passwordContainer}>
                     <TextInput
                       placeholder="Enter your password"
                       secureTextEntry={!isPasswordVisible}
@@ -150,7 +143,7 @@ const Login = () => {
                       value={value}
                       onBlur={onBlur}
                       onChangeText={onChange}
-                      className="w-[80%]"
+                      style={styles.inputText}
                     />
                     <TouchableOpacity onPress={togglePasswordVisibility}>
                       <Image
@@ -163,7 +156,7 @@ const Login = () => {
                     </TouchableOpacity>
                   </View>
                   {errors.password && (
-                    <Text className="mb-1 text-red-500">
+                    <Text style={styles.errorText}>
                       {errors.password.type === "required" &&
                         "Password is required*"}
                       {errors.password.type === "minLength" &&
@@ -176,22 +169,18 @@ const Login = () => {
             />
           </View>
 
-          <View className="w-full justify-center items-center">
-            <View className="w-[80%]">
-              <TouchableOpacity
-                className="bg-[#59B792] p-3 rounded-full"
-                onPress={handleSubmit(submit)}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#fff" />
-                ) : (
-                  <Text className="text-white font-bold text-center text-xl">
-                    Sign In
-                  </Text>
-                )}
-              </TouchableOpacity>
-            </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSubmit(submit)}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.submitButtonText}>Sign In</Text>
+              )}
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -201,5 +190,118 @@ const Login = () => {
     </ImageBackground>
   );
 };
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loginBox: {
+    width: "90%",
+    alignItems: "center",
+    backgroundColor: "white",
+    paddingVertical: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  logo: {
+    height: 80,
+    width: 180,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "600",
+    marginTop: 10,
+  },
+  subTitle: {
+    color: "#888",
+    fontWeight: "400",
+    marginBottom: 20,
+  },
+  googleButton: {
+    width: "80%",
+    borderColor: "#888",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingVertical: 10,
+    marginBottom: 10,
+    backgroundColor: "white",
+  },
+  googleButtonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  googleIcon: {
+    height: 24,
+    width: 24,
+    marginRight: 10,
+  },
+  googleButtonText: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  separator: {
+    color: "#888",
+    marginVertical: 10,
+  },
+  formContainer: {
+    width: "80%",
+  },
+  inputContainer: {
+    marginBottom: 15,
+  },
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+    marginBottom: 5,
+  },
+  inputField: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
+  inputText: {
+    fontSize: 16,
+    flex: 1,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
+  },
+  buttonContainer: {
+    width: "80%",
+    marginTop: 20,
+  },
+  submitButton: {
+    backgroundColor: "#59B792",
+    borderRadius: 10,
+    paddingVertical: 15,
+    alignItems: "center",
+  },
+  submitButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+});
 
 export default Login;
